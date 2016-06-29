@@ -14,7 +14,7 @@ var SERIALPORT = require('serialport');
 var SerialPort = require('serialport').SerialPort;
 var serialPort = null;
 function initSerialPort() {
-    var timeOutId = setTimeout(initSerialPort, 2000);
+    var timeOutId = setTimeout(initSerialPort, 5000);
 
     if (serialPort !== null) {
         clearTimeout(timeOutId);
@@ -25,29 +25,34 @@ function initSerialPort() {
             var comPort = '';
             for (var i = 0; i < ports.length; i++) {
                 var port = ports[i];
-                if (port.manufacturer === 'Silicon Labs') {
-                    comPort = port.comName;
-                    break;
+                if (port.pnpId && port.comName) {
+                    if (port.pnpId.indexOf('USB') >= 0 && port.comName.indexOf('COM') >= 0) {
+                        comPort = port.comName;
+                        break;
+                    }
                 }
             }
             if (comPort !== '') {
-                console.log('Active ' + comPort + ': Silicon Labs ');
-
-                serialPort = new SerialPort(comPort, {
-                    baudrate: 9600,
-                    dataBits: 8,
-                    stopBits: 1,
-                    parity: 'none'
-                });
-                serialPort.on('close', function () {
-                    console.log('\tPort ' + comPort + ' closed');
-                    serialPort = null;
-                    timeOutId = setTimeout(initSerialPort, 2000);
-                });
-                serialPort.on('disconnect', function () {
-                    console.log('\tPort ' + comPort + ' disconnected');
-                    serialPort.close();
-                });
+                console.log('\tActive ' + comPort + ': Silicon Labs ');
+                try {
+                    serialPort = new SerialPort(comPort, {
+                        baudrate: 9600,
+                        dataBits: 8,
+                        stopBits: 1,
+                        parity: 'none'
+                    });
+                    serialPort.on('close', function () {
+                        console.log('\tPort ' + comPort + ' closed');
+                        serialPort = null;
+                        timeOutId = setTimeout(initSerialPort, 5000);
+                    });
+                    serialPort.on('disconnect', function () {
+                        console.log('\tPort ' + comPort + ' disconnected');
+                        serialPort.close();
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
             } else {
                 console.log('\tNo serial ports are connected');
             }
