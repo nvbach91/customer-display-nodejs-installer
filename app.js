@@ -14,7 +14,10 @@ var SERIALPORT = require('serialport');
 var SerialPort = require('serialport').SerialPort;
 var serialPort = null;
 function initSerialPort() {
+    var timeOutId = setTimeout(initSerialPort, 2000);
+
     if (serialPort !== null) {
+        clearTimeout(timeOutId);
         //console.log(dateFormat(new Date(), 'isoDateTime') + ' Active: ' + serialPort.path);
     } else {
         console.log('Scanning for serial ports');
@@ -39,6 +42,7 @@ function initSerialPort() {
                 serialPort.on('close', function () {
                     console.log('\tPort ' + comPort + ' closed');
                     serialPort = null;
+                    timeOutId = setTimeout(initSerialPort, 2000);
                 });
                 serialPort.on('disconnect', function () {
                     console.log('\tPort ' + comPort + ' disconnected');
@@ -50,7 +54,6 @@ function initSerialPort() {
 
         });
     }
-    setTimeout(initSerialPort, 2000);
 }
 ;
 function convertMessage(msg) {
