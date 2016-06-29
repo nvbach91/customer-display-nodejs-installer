@@ -4,7 +4,9 @@
   "description": "Writes messages coming from post requests to serial port",
   "main": "app.js",
   "dependencies": {
+    "bluebird": "^3.4.1",
     "body-parser": "^1.15.2",
+    "dateformat": "^1.0.12",
     "express": "^4.14.0",
     "serialport": "^3.1.2"
   },
