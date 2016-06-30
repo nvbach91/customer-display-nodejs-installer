@@ -3,7 +3,7 @@ var Service = require('node-windows').Service;
 // Create a new service object
 var svc = new Service({
   name:'Customer Display Serial Interface',
-  script: 'C:\\utilities\\nodeserial\\app.js'
+  script: require('path').join(__dirname, 'app.js')
 });
 
 // Listen for the "uninstall" event so we know when it's done.
