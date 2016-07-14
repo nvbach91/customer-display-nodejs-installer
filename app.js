@@ -1,4 +1,4 @@
-
+﻿
 /* EXAMPLE TO CALL THIS API
  
  $.ajax({
@@ -111,6 +111,15 @@ app.get('/customerdisplay', function (req, res) {
         res.jsonp({success: false, msg: 'Customer display is not connected'});
     }
 });
+
+/*var fs = require('fs');
+var https = require('https');
+var server = https.createServer({
+    key: fs.readFileSync('./ssl/my.key'),
+    cert: fs.readFileSync('./ssl/my.crt')
+}, app)
+
+server.listen(2112);*/
 
 app.listen(2112, function () {
     console.log('Listening for custopmer display requests on http://localhost:2112');
