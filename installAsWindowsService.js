@@ -9,6 +9,8 @@ var svc = new Service({
 
 svc.on('install',function(){
   svc.start();
+  console.log('Install complete.');
+  console.log('The service exists: ', svc.exists);
 });
 
 svc.install();
